@@ -1,0 +1,29 @@
+version: '3.7'
+services:
+  web:
+    build: .
+    command: python3 /code/manage.py runserver 0.0.0.0:1234
+    volumes:
+      - .:/code
+    ports:
+      - 1234:1234
+    depends_on:
+      - db
+    environment:
+      - REDIS_HOST=redis
+  db:
+    image: postgres:11
+    ports:
+      - '5432'
+    environment:
+      - POSTGRES_DB=bambi
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+  redis:
+    image: redis:5
+    ports:
+      - '6379:6379'
+volumes:
+  postgres_data:
